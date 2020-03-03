@@ -27,10 +27,8 @@
                                     <button type="button"
                                             v-b-tooltip.hover.top
                                             :title="option"
-                                            class="btn-icon-clipboard" data-clipboard-text="air-baloon" @click="optionSelected(option)">
+                                            class="btn-icon-clipboard" data-clipboard-text="air-baloon">
                                         <div>
-                                          <!-- {{quizObj.questions[currentQuestionNumber-1]}} -->
-                                            <div v-if="quizObj.questions[currentQuestionNumber-1].selected == option">Selected</div>
                                             <span class="optionAlpha" v-if="index==0">A</span>
                                             <span class="optionAlpha" v-if="index==1">B</span>
                                             <span class="optionAlpha" v-if="index==2">C</span>
@@ -46,20 +44,11 @@
             </div>
             <br>
             <div >
-              <router-link :to="'/quiz/'+quizId+'/'+ (--currentQuestionNumber)">
-                          <base-button type="primary" v-if="currentQuestionNumber==1" disabled style="margin-right: 16px">Previous</base-button>
-                          <base-button type="primary" v-else style="margin-right: 16px">Previous</base-button>
-              </router-link>
-              <router-link :to="'/quiz/'+quizId+'/'+ (++currentQuestionNumber)">
-                          <base-button type="success" v-if="currentQuestionNumber==4">Finish</base-button>
-                          <base-button type="success" v-else @click="status2(currentQuestionNumber,onclk)">Next</base-button>
-              </router-link>
-              <router-link :to="'/quiz/'+quizId+'/'+ (++currentQuestionNumber)">
-                          <base-button type="warning" class="float-right" @click="mark(currentQuestionNumber)">Mark for Review and Next</base-button>
-              </router-link> 
-                  <base-button type="warning" class="float-right" style="margin-right: 16px" @click="unmark(currentQuestionNumber)">Unmark</base-button>
+              <base-button type="primary">Previous</base-button>
+              <base-button type="success" @click="next()" >Next</base-button>
+              <base-button type="warning" class="float-right">Mark as Review</base-button>
             </div>
-           
+               
         </div>
     </div>
 </template>
@@ -68,19 +57,16 @@
   import VueClipboard from 'vue-clipboard2'
   import BTooltipDirective from 'bootstrap-vue/es/directives/tooltip'
   Vue.use(VueClipboard)
-  
   export default {
     directives: {
       'b-tooltip': BTooltipDirective
     },
     props:{
         quizObj:Object,
-        quizId:String,
-        onclk:false
     },
     data() {
       return {
-        questionLoaded:false,
+        questionLoaded:false
       }
     },
     methods: {
@@ -90,29 +76,15 @@
           title: 'Copied to clipboard'
         })
       },
-      mark(currentQuestionNumber){
-          this.quizObj.questions[currentQuestionNumber-1].marked = true;
-      },
-      unmark(currentQuestionNumber){
-          this.quizObj.questions[currentQuestionNumber-1].marked = false;
- 
+      next(){
           
-      },
-      optionSelected(selected){
-        // this.onclk = true;
-        if(this.quizObj.questions[this.currentQuestionNumber-1].selected == selected){
-          this.quizObj.questions[this.currentQuestionNumber-1].selected = ''
-          return;
-        }
-        this.quizObj.questions[this.currentQuestionNumber-1].selected = selected
-        // console.log(this.quizObj.questions[this.currentQuestionNumber-1])
       }
 
     },
     computed:{
-        currentQuestionNumber: function() {
-           return this.$route.params.questionNumber
-        }
+        currentQuestionNumber:function(){
+            return this.$route.params.questionNumber
+        },
         
     },
     mounted(){
