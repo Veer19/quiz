@@ -57,7 +57,7 @@
                             </div>
                             <div class="text-center">
                                 <h3>
-                                    {{JSON.parse(localStorage.getItem('user')).name}}<span class="font-weight-light">, 27</span>
+                                    Jessica Jones<span class="font-weight-light">, 27</span>
                                 </h3>
                                 <div class="h5 font-weight-300">
                                     <i class="ni location_pin mr-2"></i>Bucharest, Romania

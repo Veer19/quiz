@@ -101,7 +101,7 @@ import firebaseApp from '../firebaseConfig'
                             name : user.displayName,
                             email: user.email,
                             registeredTests:[],
-                            photoURL:user.photoURL
+                            pictureURL:''
                         })
                     }
                     else {
@@ -122,7 +122,7 @@ import firebaseApp from '../firebaseConfig'
                     name : this.name,
                     email: this.email,
                     registeredTests:[],
-                    photoURL:''
+                    pictureURL:''
                 }).then(()=>{
                     localStorage.setItem('user',JSON.stringify(this.userData))
                     this.$router.push('dashboard')

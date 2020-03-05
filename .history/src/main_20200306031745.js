@@ -20,12 +20,20 @@ import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
 import ArgonDashboard from './plugins/argon-dashboard'
-import VeeValidate from 'vee-validate'
+import { VeeValidate , ValidationProvider, extend } from 'vee-validate';
+import { required } from 'vee-validate/dist/rules';
 
-Vue.use(VeeValidate)
+extend('required', {
+  ...required,
+  message: 'This field is required'
+});
 Vue.config.productionTip = false
 Vue.use(ArgonDashboard)
+Vue.use(VeeValidate)
 new Vue({
   router,
+  components: {
+    ValidationProvider
+  },
   render: h => h(App)
 }).$mount('#app')

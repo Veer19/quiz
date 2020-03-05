@@ -72,20 +72,18 @@
                 firebaseApp.auth.signInWithPopup(provider)
                 .then(snapshot=>{
                     let user = snapshot.user
-                    console.log(user)
                     return firebaseApp.db.doc("users/"+user.uid).get()
                     .then(doc => {
                         if(!doc.exists){
                             return firebaseApp.db.doc("users/"+ user.uid).set({
                                 name : user.displayName,
                                 email: user.email,
-                                registeredTests:[],
-                                photoURL:user.photoURL
+                                registeredTests:[]
                             })
                         }
                         else {
-                            console.log(doc.data())
-                            localStorage.setItem('user',JSON.stringify(doc.data()))
+                            console.log(doc.data)
+                            localStorage.setItem('user',JSON.stringify(doc.data))
                         }
                     })
                 })

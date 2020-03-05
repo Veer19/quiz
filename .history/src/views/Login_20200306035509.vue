@@ -80,7 +80,7 @@
                                 name : user.displayName,
                                 email: user.email,
                                 registeredTests:[],
-                                photoURL:user.photoURL
+                                pictureURL:
                             })
                         }
                         else {

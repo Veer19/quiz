@@ -20,7 +20,7 @@
                   <img alt="Image placeholder" :src="userData.photoURL">
                 </span>
                         <div class="media-body ml-2 d-none d-lg-block">
-                            <span class="mb-0 text-sm  font-weight-bold">{{userData.name}}</span>
+                            <span class="mb-0 text-sm  font-weight-bold">{{userData}}</span>
                         </div>
                     </div>
 
@@ -65,7 +65,7 @@
         userData:{}
       };
     },
-    mounted(){
+    beforeCreate(){
       this.userData = JSON.parse(localStorage.getItem('user'))
       console.log(this.userData);
       

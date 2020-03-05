@@ -27,5 +27,8 @@ Vue.config.productionTip = false
 Vue.use(ArgonDashboard)
 new Vue({
   router,
+  components: {
+    ValidationProvider
+  },
   render: h => h(App)
 }).$mount('#app')
