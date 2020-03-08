@@ -4,7 +4,7 @@
             <!-- Card stats -->
             <div class="row">
                 <div class="col-xl-3 col-lg-6">
-                    <stats-card title="Tests Taken"
+                    <stats-card title="Total traffic"
                                 type="gradient-red"
                                 sub-title="350,897"
                                 icon="ni ni-active-40"

@@ -22,7 +22,7 @@
                         <base-input class="input-group-alternative mb-3"
                                     placeholder="Name"
                                     addon-left-icon="ni ni-hat-3"
-                                    v-model="name"
+                                    v-model="model.name"
                                     v-validate="'required'"
                                     name="name">
                         </base-input>
@@ -31,7 +31,7 @@
                         <base-input class="input-group-alternative mb-3"
                                     placeholder="Email"
                                     addon-left-icon="ni ni-email-83"
-                                    v-model="email"
+                                    v-model="model.email"
                                     v-validate="'required|email'"
                                     name="email">
                         </base-input>
@@ -40,7 +40,7 @@
                                     placeholder="Password"
                                     type="password"
                                     addon-left-icon="ni ni-lock-circle-open"
-                                    v-model="password"
+                                    v-model="model.password"
                                     name="password">
                             
                         </base-input>
@@ -56,7 +56,6 @@
                         <div class="text-center">
                             <base-button @click=createAccount type="primary" class="my-4">Create account</base-button>
                         </div>
-                        {{error}}
                     </form>
                 </div>
             </div>
@@ -76,16 +75,15 @@
     </div>
 </template>
 <script>
-import firebaseApp from '../firebaseConfig'
   export default {
     name: 'register',
     data() {
       return {
-        name: '',
-        email: '',
-        password: '',
-        error:'',
-        userData:{}
+        model: {
+          name: '',
+          email: '',
+          password: ''
+        }
       }
     },
     methods:{
@@ -94,38 +92,28 @@ import firebaseApp from '../firebaseConfig'
             firebaseApp.auth.signInWithPopup(provider)
             .then(snapshot=>{
                 let user = snapshot.user
+                localStorage.setItem('uid',user.uid)
                 return firebaseApp.db.doc("users/"+user.uid).get()
                 .then(doc => {
                     if(!doc.exists){
                         return firebaseApp.db.doc("users/"+ user.uid).set({
                             name : user.displayName,
                             email: user.email,
-                            registeredTests:[],
-                            photoURL:user.photoURL
+                            registeredTests:[]
                         })
-                    }
-                    else {
-                        console.log(doc.data())
-                        localStorage.setItem('user',JSON.stringify(doc.data()))
                     }
                 })
             })
             .then(()=>{
-                this.$router.push('dashboard')
+                this.$router.push('home')
             })
         },
         createAccount(){
             firebaseApp.auth.createUserWithEmailAndPassword(this.email,this.password).then(user=>{
-                console.log(user)
-                this.userData= user.user
-                firebaseApp.db.doc("users/"+user.user.uid).set({
-                    name : this.name,
-                    email: this.email,
-                    registeredTests:[],
-                    photoURL:''
-                }).then(()=>{
-                    localStorage.setItem('user',JSON.stringify(this.userData))
-                    this.$router.push('dashboard')
+                firebaseApp.db.doc("users/"+user.uid).set({
+                    name : user.displayName,
+                    email: user.email,
+                    registeredTests:[]
                 })
             })
             .catch(err=>{

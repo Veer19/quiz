@@ -84,8 +84,7 @@ import firebaseApp from '../firebaseConfig'
         name: '',
         email: '',
         password: '',
-        error:'',
-        userData:{}
+        error:''
       }
     },
     methods:{
@@ -94,19 +93,15 @@ import firebaseApp from '../firebaseConfig'
             firebaseApp.auth.signInWithPopup(provider)
             .then(snapshot=>{
                 let user = snapshot.user
+                localStorage.setItem('uid',user.uid)
                 return firebaseApp.db.doc("users/"+user.uid).get()
                 .then(doc => {
                     if(!doc.exists){
                         return firebaseApp.db.doc("users/"+ user.uid).set({
                             name : user.displayName,
                             email: user.email,
-                            registeredTests:[],
-                            photoURL:user.photoURL
+                            registeredTests:[]
                         })
-                    }
-                    else {
-                        console.log(doc.data())
-                        localStorage.setItem('user',JSON.stringify(doc.data()))
                     }
                 })
             })
@@ -117,14 +112,11 @@ import firebaseApp from '../firebaseConfig'
         createAccount(){
             firebaseApp.auth.createUserWithEmailAndPassword(this.email,this.password).then(user=>{
                 console.log(user)
-                this.userData= user.user
                 firebaseApp.db.doc("users/"+user.user.uid).set({
                     name : this.name,
                     email: this.email,
-                    registeredTests:[],
-                    photoURL:''
+                    registeredTests:[]
                 }).then(()=>{
-                    localStorage.setItem('user',JSON.stringify(this.userData))
                     this.$router.push('dashboard')
                 })
             })

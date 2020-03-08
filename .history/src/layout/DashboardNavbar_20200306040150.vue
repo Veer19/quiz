@@ -65,7 +65,7 @@
         userData:{}
       };
     },
-    mounted(){
+    beforeMount(){
       this.userData = JSON.parse(localStorage.getItem('user'))
       console.log(this.userData);
       

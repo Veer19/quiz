@@ -100,8 +100,7 @@ import firebaseApp from '../firebaseConfig'
                         return firebaseApp.db.doc("users/"+ user.uid).set({
                             name : user.displayName,
                             email: user.email,
-                            registeredTests:[],
-                            photoURL:user.photoURL
+                            registeredTests:[]
                         })
                     }
                     else {
@@ -121,8 +120,7 @@ import firebaseApp from '../firebaseConfig'
                 firebaseApp.db.doc("users/"+user.user.uid).set({
                     name : this.name,
                     email: this.email,
-                    registeredTests:[],
-                    photoURL:''
+                    registeredTests:[]
                 }).then(()=>{
                     localStorage.setItem('user',JSON.stringify(this.userData))
                     this.$router.push('dashboard')
