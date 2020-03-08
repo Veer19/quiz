@@ -68,16 +68,12 @@
                                                     v-b-tooltip.hover.top
                                                     :title="option"
                                                     class="btn-icon-clipboard" data-clipboard-text="air-baloon">
-                                                    <base-dropdown >
-                                                        <base-button slot="title" type="default" class="duration-picker dropdown-toggle">
-                                                            Duration
-                                                        </base-button>
-                                                        <li v-for="i in [1,2,3,4,5]" :key="i">
-                                                            <a class="dropdown-item" @click="quizObj.timings.duration = i">
-                                                                {{i}} Hours
-                                                            </a>
-                                                        </li>
-                                                    </base-dropdown>
+                                                <flat-pickr
+                                                        v-model="quizObj.timings.to"                                               
+                                                        class="date-picker" 
+                                                        placeholder="Select Session Duration"               
+                                                        name="duration">
+                                                </flat-pickr>
                                             </button>
                                         </div>
                                     </div>
@@ -135,27 +131,26 @@
                                              Correct Option
                                         </base-button>
                                         <li>
-                                            <a class="dropdown-item" @click="setAnswer(questionNumber,'A')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='A'">
                                                 A
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'B')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='B'">
                                                 B
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'C')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='C'">
                                                 C
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'D')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='D'">
                                                 D
                                             </a>
                                         </li>
                                     </base-dropdown>
-                                    {{answers[questionNumber]}}
                                 </div>
                             </div>
                         </div>    
@@ -192,8 +187,7 @@
             'registeredUsers':[],
             'timings':{
                 'from':0,
-                'to':0,
-                'duration':0
+                'to':0
             }
         },
         answers:[]
@@ -256,11 +250,6 @@
       deleteQuestion(no){
           this.quizObj.questions.splice(no,1)
           this.answers.splice(no,1)
-      },
-      setAnswer(questionNumber, optionNo){
-          
-          this.answers[questionNumber]=optionNo
-          console.log(this.answers)
       }
     },
     computed:{
@@ -281,12 +270,9 @@
     margin: 10px 0 0 20px;
 } */
 .date-picker{
-    padding: 10px;
+    padding: 20px;
     width: 100%;
     border:none;
-}
-.duration-picker{
-    width: 100%;
 }
 .optionAlpha{
     background: #2DCEC9;

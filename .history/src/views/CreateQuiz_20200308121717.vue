@@ -37,7 +37,7 @@
                             <div class="card shadow">
                                 <div class="card-body">
                                     <div class="row icon-examples">
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
                                             <button type="button"
                                                     v-b-tooltip.hover.top
                                                     :title="option"
@@ -46,11 +46,11 @@
                                                         v-model="quizObj.timings.from"                                               
                                                         class="date-picker" 
                                                         placeholder="Select Quiz Starting Date"               
-                                                        name="fromdate">
+                                                        name="date">
                                                 </flat-pickr>
                                             </button>
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
                                             <button type="button"
                                                     v-b-tooltip.hover.top
                                                     :title="option"
@@ -59,25 +59,8 @@
                                                         v-model="quizObj.timings.to"                                               
                                                         class="date-picker" 
                                                         placeholder="Select Quiz Ending Date"               
-                                                        name="todate">
+                                                        name="date">
                                                 </flat-pickr>
-                                            </button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <button type="button"
-                                                    v-b-tooltip.hover.top
-                                                    :title="option"
-                                                    class="btn-icon-clipboard" data-clipboard-text="air-baloon">
-                                                    <base-dropdown >
-                                                        <base-button slot="title" type="default" class="duration-picker dropdown-toggle">
-                                                            Duration
-                                                        </base-button>
-                                                        <li v-for="i in [1,2,3,4,5]" :key="i">
-                                                            <a class="dropdown-item" @click="quizObj.timings.duration = i">
-                                                                {{i}} Hours
-                                                            </a>
-                                                        </li>
-                                                    </base-dropdown>
                                             </button>
                                         </div>
                                     </div>
@@ -135,27 +118,26 @@
                                              Correct Option
                                         </base-button>
                                         <li>
-                                            <a class="dropdown-item" @click="setAnswer(questionNumber,'A')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='A'">
                                                 A
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'B')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='B'">
                                                 B
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'C')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='C'">
                                                 C
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'D')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='D'">
                                                 D
                                             </a>
                                         </li>
                                     </base-dropdown>
-                                    {{answers[questionNumber]}}
                                 </div>
                             </div>
                         </div>    
@@ -192,8 +174,7 @@
             'registeredUsers':[],
             'timings':{
                 'from':0,
-                'to':0,
-                'duration':0
+                'to':0
             }
         },
         answers:[]
@@ -225,42 +206,19 @@
         //   this.quizObj.questions[no+1] = {...q}
         //   this.answers[no] = this.answers[no+1]
         //   this.answers[no+1] = a
-        Array.prototype.move = function (old_index, new_index) {
-            if (new_index >= this.length) {
-                var k = new_index - this.length;
-                while ((k--) + 1) {
-                    this.push(undefined);
-                }
-            }
-            this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-            return this; // for testing purposes
-        };
-        this.quizObj.questions.move(no,no+1)
-        this.answers.move(no,no+1)
+        this.quizObj.questions.move(this.quizObj.questions[no],no+1)
       },
       moveUp(no){
-          
-            Array.prototype.move = function (old_index, new_index) {
-            if (new_index >= this.length) {
-                var k = new_index - this.length;
-                while ((k--) + 1) {
-                    this.push(undefined);
-                }
-            }
-            this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-            return this; // for testing purposes
-        };
-        this.quizObj.questions.move(no,no-1)
-        this.answers.move(no,no-1)
+            let q = {...this.quizObj.questions[no]}
+            let a = this.answers[no]
+            this.quizObj.questions[no] = {...this.quizObj.questions[no-1]}
+            this.quizObj.questions[no-1] = {...q}
+            this.answers[no] = this.answers[no-1]
+            this.answers[no-1] = a
       },
       deleteQuestion(no){
-          this.quizObj.questions.splice(no,1)
-          this.answers.splice(no,1)
-      },
-      setAnswer(questionNumber, optionNo){
-          
-          this.answers[questionNumber]=optionNo
-          console.log(this.answers)
+          this.quizObj.questions.pop()
+          this.answers.pop()
       }
     },
     computed:{
@@ -281,12 +239,9 @@
     margin: 10px 0 0 20px;
 } */
 .date-picker{
-    padding: 10px;
+    padding: 20px;
     width: 100%;
     border:none;
-}
-.duration-picker{
-    width: 100%;
 }
 .optionAlpha{
     background: #2DCEC9;

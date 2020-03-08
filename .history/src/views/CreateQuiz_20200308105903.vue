@@ -26,9 +26,8 @@
                                 v-model="quizObj.description" placeholder="Description">
                     </textarea>
                     <div class="error">{{ errors.first('description') }}</div>
-                    <br>
-                
                 </div>
+                <br><br>
                 
                 
                 <div class="container-col-lg-12 col-md-12">
@@ -37,7 +36,7 @@
                             <div class="card shadow">
                                 <div class="card-body">
                                     <div class="row icon-examples">
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
                                             <button type="button"
                                                     v-b-tooltip.hover.top
                                                     :title="option"
@@ -46,11 +45,11 @@
                                                         v-model="quizObj.timings.from"                                               
                                                         class="date-picker" 
                                                         placeholder="Select Quiz Starting Date"               
-                                                        name="fromdate">
+                                                        name="date">
                                                 </flat-pickr>
                                             </button>
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
                                             <button type="button"
                                                     v-b-tooltip.hover.top
                                                     :title="option"
@@ -59,25 +58,8 @@
                                                         v-model="quizObj.timings.to"                                               
                                                         class="date-picker" 
                                                         placeholder="Select Quiz Ending Date"               
-                                                        name="todate">
+                                                        name="date">
                                                 </flat-pickr>
-                                            </button>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <button type="button"
-                                                    v-b-tooltip.hover.top
-                                                    :title="option"
-                                                    class="btn-icon-clipboard" data-clipboard-text="air-baloon">
-                                                    <base-dropdown >
-                                                        <base-button slot="title" type="default" class="duration-picker dropdown-toggle">
-                                                            Duration
-                                                        </base-button>
-                                                        <li v-for="i in [1,2,3,4,5]" :key="i">
-                                                            <a class="dropdown-item" @click="quizObj.timings.duration = i">
-                                                                {{i}} Hours
-                                                            </a>
-                                                        </li>
-                                                    </base-dropdown>
                                             </button>
                                         </div>
                                     </div>
@@ -95,27 +77,14 @@
             v-for="(question, questionNumber) in quizObj.questions" :key="questionNumber">
                 <div class="col">
                     <div class="card shadow">
-                        <div class="card-header border-0">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                <h3 class="mb-0">{{'Question '+(questionNumber+1)}}</h3>
-                                </div>
-                                <div class="col text-right">
-                                    <div v-if="questionNumber!=0" @click="moveUp(questionNumber)" class="rightButtons btn btn-sm btn-primary">Move Up</div>
-                                    <div v-if="questionNumber!=quizObj.questions.length-1" @click="moveDown(questionNumber)" class="rightButtons btn btn-sm btn-primary">Move Down</div>
-                                    <div @click="deleteQuestion(questionNumber)" class="rightButtons btn btn-sm btn-primary">Delete</div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="card-body">
                             <div class="row icon-examples">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
-                                    
                                      <base-input class="input-group-alternative mb-3"
                                                 :placeholder="'Question '+(questionNumber+1)"
                                                 v-validate="'required'"
                                                 :name="'Question '+(questionNumber+1)"
-                                                v-model="quizObj.questions[questionNumber].text">
+                                                v-model="quizObj.questions[0].text">
                                     </base-input>
                                     <div class="error">{{ errors.first('Question '+(questionNumber+1)) }}</div>
                                     <br>
@@ -130,39 +99,10 @@
                                             </base-input>
                                         </div>
                                     </div>
-                                    <base-dropdown>
-                                        <base-button slot="title" type="default" class="dropdown-toggle">
-                                             Correct Option
-                                        </base-button>
-                                        <li>
-                                            <a class="dropdown-item" @click="setAnswer(questionNumber,'A')">
-                                                A
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'B')">
-                                                B
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'C')">
-                                                C
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'D')">
-                                                D
-                                            </a>
-                                        </li>
-                                    </base-dropdown>
-                                    {{answers[questionNumber]}}
+                                    Correct Answer
                                 </div>
                             </div>
-                        </div>    
-                        <div v-if="questionNumber == quizObj.questions.length-1" class="addButton" @click="add">
-                            <i class="ni ni-fat-add"></i>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -189,14 +129,13 @@
             'title':'',
             'description':'',
             'questions':[],
+            'answers':[],
             'registeredUsers':[],
             'timings':{
                 'from':0,
-                'to':0,
-                'duration':0
+                'to':0
             }
-        },
-        answers:[]
+        }
       }
     },
     methods: {
@@ -205,69 +144,20 @@
           type: 'success',
           title: 'Copied to clipboard'
         })
-      },
-      add(){
-          let question  = {
-            'text':"",
-            'options':[
-              '','','',''
-            ]
-            }
-            let answer = ''
-          this.quizObj.questions.push(question)
-          this.answers.push(answer)
-      },
-      moveDown(no){
-        //   console.log(no)
-        //   let q = {...this.quizObj.questions[no]}
-        // //   let a = this.answers[no]
-        //   this.quizObj.questions[no] = {...this.quizObj.questions[no+1]}
-        //   this.quizObj.questions[no+1] = {...q}
-        //   this.answers[no] = this.answers[no+1]
-        //   this.answers[no+1] = a
-        Array.prototype.move = function (old_index, new_index) {
-            if (new_index >= this.length) {
-                var k = new_index - this.length;
-                while ((k--) + 1) {
-                    this.push(undefined);
-                }
-            }
-            this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-            return this; // for testing purposes
-        };
-        this.quizObj.questions.move(no,no+1)
-        this.answers.move(no,no+1)
-      },
-      moveUp(no){
-          
-            Array.prototype.move = function (old_index, new_index) {
-            if (new_index >= this.length) {
-                var k = new_index - this.length;
-                while ((k--) + 1) {
-                    this.push(undefined);
-                }
-            }
-            this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-            return this; // for testing purposes
-        };
-        this.quizObj.questions.move(no,no-1)
-        this.answers.move(no,no-1)
-      },
-      deleteQuestion(no){
-          this.quizObj.questions.splice(no,1)
-          this.answers.splice(no,1)
-      },
-      setAnswer(questionNumber, optionNo){
-          
-          this.answers[questionNumber]=optionNo
-          console.log(this.answers)
       }
     },
     computed:{
     },
     mounted(){
-        
-        this.add()
+        let question  = {
+            'text':"",
+            'options':[
+              '','','',''
+            ]
+        }
+        let answer = ''
+        this.quizObj['questions'].push(question)
+        this.quizObj['answers'].push(answer)
     }
   };
 </script>
@@ -281,12 +171,7 @@
     margin: 10px 0 0 20px;
 } */
 .date-picker{
-    padding: 10px;
-    width: 100%;
-    border:none;
-}
-.duration-picker{
-    width: 100%;
+    padding: 20px;
 }
 .optionAlpha{
     background: #2DCEC9;
@@ -304,15 +189,5 @@
     display: inline-block;
     vertical-align: middle;
     height: 100%;
-}
-.rightButtons{
-    color: white !important;
-}
-.addButton{
-    padding: 10px;
-    background:#2DCE95;
-    text-align: center;
-    color: white;
-    cursor: pointer;
 }
 </style>

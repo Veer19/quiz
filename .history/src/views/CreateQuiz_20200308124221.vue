@@ -155,7 +155,6 @@
                                             </a>
                                         </li>
                                     </base-dropdown>
-                                    {{answers[questionNumber]}}
                                 </div>
                             </div>
                         </div>    

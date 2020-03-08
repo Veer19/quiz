@@ -132,7 +132,7 @@
                                     </div>
                                     <base-dropdown>
                                         <base-button slot="title" type="default" class="dropdown-toggle">
-                                             Correct Option
+                                             Correct Option : {{answers[questionNumber]}}
                                         </base-button>
                                         <li>
                                             <a class="dropdown-item" @click="setAnswer(questionNumber,'A')">
@@ -155,7 +155,6 @@
                                             </a>
                                         </li>
                                     </base-dropdown>
-                                    {{answers[questionNumber]}}
                                 </div>
                             </div>
                         </div>    

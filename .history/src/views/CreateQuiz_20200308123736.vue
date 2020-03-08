@@ -132,30 +132,29 @@
                                     </div>
                                     <base-dropdown>
                                         <base-button slot="title" type="default" class="dropdown-toggle">
-                                             Correct Option
+                                             Correct Option : {{answers[questionNumber]}}
                                         </base-button>
                                         <li>
-                                            <a class="dropdown-item" @click="setAnswer(questionNumber,'A')">
+                                            <a class="dropdown-item" @click="setAnswer(questionNumber,0)">
                                                 A
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'B')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]='B'">
                                                 B
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'C')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]='C'">
                                                 C
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'D')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]='D'">
                                                 D
                                             </a>
                                         </li>
                                     </base-dropdown>
-                                    {{answers[questionNumber]}}
                                 </div>
                             </div>
                         </div>    
@@ -259,7 +258,7 @@
       },
       setAnswer(questionNumber, optionNo){
           
-          this.answers[questionNumber]=optionNo
+          this.answers[questionNumber]=this.quizObj.questions[questionNumber].options[optionNo]
           console.log(this.answers)
       }
     },

@@ -73,7 +73,7 @@
                                                             Duration
                                                         </base-button>
                                                         <li v-for="i in [1,2,3,4,5]" :key="i">
-                                                            <a class="dropdown-item" @click="quizObj.timings.duration = i">
+                                                            <a class="dropdown-item" @click="quizObj.timings.duration == i">
                                                                 {{i}} Hours
                                                             </a>
                                                         </li>
@@ -135,27 +135,26 @@
                                              Correct Option
                                         </base-button>
                                         <li>
-                                            <a class="dropdown-item" @click="setAnswer(questionNumber,'A')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='A'">
                                                 A
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'B')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='B'">
                                                 B
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'C')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='C'">
                                                 C
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item"  @click="setAnswer(questionNumber,'D')">
+                                            <a class="dropdown-item" @click="answers[questionNumber]=='D'">
                                                 D
                                             </a>
                                         </li>
                                     </base-dropdown>
-                                    {{answers[questionNumber]}}
                                 </div>
                             </div>
                         </div>    
@@ -256,11 +255,6 @@
       deleteQuestion(no){
           this.quizObj.questions.splice(no,1)
           this.answers.splice(no,1)
-      },
-      setAnswer(questionNumber, optionNo){
-          
-          this.answers[questionNumber]=optionNo
-          console.log(this.answers)
       }
     },
     computed:{
