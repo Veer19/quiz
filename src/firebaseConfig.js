@@ -1,12 +1,13 @@
 const firebaseConfig = {
-    apiKey: "AIzaSyBcC5dk5ukFGG8HtVAW3A6p-Yat9BLXFNs",
-    authDomain: "jaipuria-clubs.firebaseapp.com",
-    databaseURL: "https://jaipuria-clubs.firebaseio.com",
-    projectId: "jaipuria-clubs",
-    storageBucket: "jaipuria-clubs.appspot.com",
-    messagingSenderId: "608107382470",
-    appId: "1:608107382470:web:60c7b46ce42bf4f89ff9c7"
-};
+    apiKey: "AIzaSyAPii4J-OK_Ia1ZtM7FsCq9Lm33LT6pdQw",
+    authDomain: "social-impact-fc0b3.firebaseapp.com",
+    databaseURL: "https://social-impact-fc0b3.firebaseio.com",
+    projectId: "social-impact-fc0b3",
+    storageBucket: "social-impact-fc0b3.appspot.com",
+    messagingSenderId: "822924673601",
+    appId: "1:822924673601:web:db6c46c218121b730dfcc0",
+    measurementId: "G-00EZR1TH8L"
+  };
 import firebase from 'firebase'
 import 'firebase/firestore'
 firebase.initializeApp(firebaseConfig)
