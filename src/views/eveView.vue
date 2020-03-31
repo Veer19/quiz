@@ -4,15 +4,15 @@
 <script>
 export default {
     props:{
-        quizId:String,
+        eventId:String,
         event:Object
     },
     methods:{
         submitted(){
-            // console.log(this.event)
-            // console.log("sksdj")
-            // console.log(this.eventobj.rows[0].events[0].register)
-            // console.log("skkl")
+            console.log(this.event)
+            console.log("sksdj")
+            console.log(this.event.register)
+            console.log("skkl")
         }
     }
 }

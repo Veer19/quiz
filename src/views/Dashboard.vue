@@ -15,7 +15,7 @@
                             <span class="float-right">{{event.time}}</span>
                             <br>
                             <br>
-                        <router-link :to="{path:'/dashboard/'+event.eventID}" v-if="!event.register"><base-button type="primary">Register</base-button></router-link>
+                        <router-link :to="{path:'/dashboard/'+event.eventID}" :event="event" v-if="!event.register"><base-button type="primary">Register</base-button></router-link>
                         <base-button type="primary" v-else disabled>Registered</base-button>
 
                         </template>
@@ -35,7 +35,8 @@
     data() {
       return {
         eventID:Number,
-        eventobj:{}
+        eventobj:{},
+
       };
     }, 
     beforeMount(){
