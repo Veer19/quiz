@@ -166,6 +166,7 @@
                     </div>
                 </div>
             </div>
+            <base-button  type="primary" @click=create>Create</base-button>
         </div>
     </div>
 </template>
@@ -175,6 +176,8 @@
   import BTooltipDirective from 'bootstrap-vue/es/directives/tooltip'
   import flatPickr from 'vue-flatpickr-component';
   import 'flatpickr/dist/flatpickr.css';
+  import firebaseApp from '../firebaseConfig';
+  import firebase from 'firebase'
   Vue.use(VueClipboard)
   export default {
     directives: {
@@ -261,6 +264,15 @@
           
           this.answers[questionNumber]=optionNo
           console.log(this.answers)
+      },
+      create(){
+        let db=firebase.firestore();
+        return firebaseApp.db.collection('createdQuiz').add(this.quizObj).then(snapshot=>{
+            return db.doc("createdQuiz/"+snapshot.id).onSnapshot(quiz=>{
+                console.log(quiz.data())
+            })
+        })
+        
       }
     },
     computed:{
