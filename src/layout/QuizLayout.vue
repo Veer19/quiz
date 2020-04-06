@@ -32,6 +32,8 @@
   import DashboardNavbar from './DashboardNavbar.vue';
   import ContentFooter from './ContentFooter.vue';
   import { FadeTransition } from 'vue2-transitions';
+  import firebaseApp from '../firebaseConfig';
+  import firebase from 'firebase'
 
   export default {
     components: {
@@ -59,48 +61,59 @@
       // console.log(this.$route.params.quizId)
       //GET MATCH QUIZ
       this.quizId = this.$route.params.quizId
-      this.quizObj = {
-        'name':"First Quiz",
-        'questions':[
-          { 
-            'marked':false,
-            'number':1,
-            'text':"Text Goes Here 1",
-            'options':[
-              'ans11','ans22','ans3','ans4'
-            ],
-            'selected':''
-          },
-          {
-            'marked':false,
-            'number':2,
-            'text':"Text Goes Here 2",
-            'options':[
-              'ans1','ans2','ans3','ans4'
-            ],
-            'selected':''
-          },
-          {
-            'marked':false,
-            'number':3,
-            'text':"Text Goes Here",
-            'options':[
-              'ans1','ans2','ans3','ans4'
-            ],
-            'selected':''
-          },
-          {
-            'marked':false,
-            'number':4,
-            'text':"Text Goes Here",
-            'options':[
-              'ans1','ans2','ans3','ans4'
-            ],
-            'selected':''
-          },
+      firebaseApp.db.collection("createdQuiz").get().then(snapshot=>{
+        snapshot.docs.forEach(doc=>{
+          console.log(doc.data())
+          this.quizObj=doc.data()
+        })
+      })
+      this.quizObj.questions[1].push({
+        'marked':false,
+        'selected':''
+      })
+      
+      // this.quizObj = {
+      //   'name':"First Quiz",
+      //   'questions':[
+      //     { 
+      //       'marked':false,
+      //       'number':1,
+      //       'text':"Text Goes Here 1",
+      //       'options':[
+      //         'ans11','ans22','ans3','ans4'
+      //       ],
+      //       'selected':''
+      //     },
+      //     {
+      //       'marked':false,
+      //       'number':2,
+      //       'text':"Text Goes Here 2",
+      //       'options':[
+      //         'ans1','ans2','ans3','ans4'
+      //       ],
+      //       'selected':''
+      //     },
+      //     {
+      //       'marked':false,
+      //       'number':3,
+      //       'text':"Text Goes Here",
+      //       'options':[
+      //         'ans1','ans2','ans3','ans4'
+      //       ],
+      //       'selected':''
+      //     },
+      //     {
+      //       'marked':false,
+      //       'number':4,
+      //       'text':"Text Goes Here",
+      //       'options':[
+      //         'ans1','ans2','ans3','ans4'
+      //       ],
+      //       'selected':''
+      //     },
           
-        ]
-      }
+      //   ]
+      // }
     }
 
   };

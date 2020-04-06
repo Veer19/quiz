@@ -43,7 +43,7 @@
                 </div>
             </div>
             <br>
-            <div >
+             <div >
               <base-button type="primary">Previous</base-button>
               <base-button type="success" @click="next()" >Next</base-button>
               <base-button type="warning" class="float-right">Mark as Review</base-button>

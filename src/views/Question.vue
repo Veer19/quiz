@@ -46,6 +46,7 @@
             </div>
             <br>
             <div >
+              
               <router-link :to="'/quiz/'+quizId+'/'+ (--currentQuestionNumber)">
                           <base-button type="primary" v-if="currentQuestionNumber==1" disabled style="margin-right: 16px">Previous</base-button>
                           <base-button type="primary" v-else style="margin-right: 16px">Previous</base-button>
@@ -109,6 +110,12 @@
       }
 
     },
+    // beforeMount(){
+      
+    //   this.quizObj.push({'marked':false,
+    //   'selected':""})
+    //   console.log(quizObj.data())
+    // },
     computed:{
         currentQuestionNumber: function() {
            return this.$route.params.questionNumber

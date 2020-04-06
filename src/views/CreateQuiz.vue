@@ -159,7 +159,7 @@
                                 </div>
                             </div>
                         </div>    
-                        <div v-if="questionNumber == quizObj.questions.length-1" class="addButton" @click="add">
+                        <div v-if="questionNumber == quizObj.questions.length-1" class="addButton" @click="add(questionNumber+1)">
                             <i class="ni ni-fat-add"></i>
                         </div>
                         
@@ -197,7 +197,7 @@
                 'from':0,
                 'to':0,
                 'duration':0
-            }
+            },
         },
         answers:[]
       }
@@ -209,15 +209,20 @@
           title: 'Copied to clipboard'
         })
       },
-      add(){
+      add(questionNumber){
           let question  = {
             'text':"",
+            'number':1,
             'options':[
               '','','',''
             ]
             }
             let answer = ''
-          this.quizObj.questions.push(question)
+            question.number=questionNumber+1
+            console.log("hkjwhk")
+           console.log(question.number)
+         console.log("hkjwhk")
+         this.quizObj.questions.push(question)
           this.answers.push(answer)
       },
       moveDown(no){
