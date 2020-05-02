@@ -40,7 +40,6 @@
                                         <div class="col-lg-4 col-md-4 col-sm-12">
                                             <button type="button"
                                                     v-b-tooltip.hover.top
-                                                    :title="option"
                                                     class="btn-icon-clipboard" data-clipboard-text="air-baloon">
                                                 <flat-pickr
                                                         v-model="testObj.timings.from"                                               
@@ -53,7 +52,6 @@
                                         <div class="col-lg-4 col-md-4 col-sm-12">
                                             <button type="button"
                                                     v-b-tooltip.hover.top
-                                                    :title="option"
                                                     class="btn-icon-clipboard" data-clipboard-text="air-baloon">
                                                 <flat-pickr
                                                         v-model="testObj.timings.to"                                               
@@ -66,7 +64,6 @@
                                         <div class="col-lg-4 col-md-4 col-sm-12">
                                             <button type="button"
                                                     v-b-tooltip.hover.top
-                                                    :title="option"
                                                     class="btn-icon-clipboard" data-clipboard-text="air-baloon">
                                                     <base-dropdown >
                                                         <base-button slot="title" type="default" class="duration-picker dropdown-toggle">
@@ -159,14 +156,14 @@
                                 </div>
                             </div>
                         </div>    
-                        <div v-if="questionNumber == testObj.questions.length-1" class="addButton" @click="add(questionNumber+1)">
+                        <div class="addButton" @click="add()">
                             <i class="ni ni-fat-add"></i>
                         </div>
                         
                     </div>
                 </div>
             </div>
-            <base-button  type="primary" @click=create>Create</base-button>
+            <base-button  type="primary" @click="create">Create</base-button>
         </div>
     </div>
 </template>
@@ -176,7 +173,7 @@
   import BTooltipDirective from 'bootstrap-vue/es/directives/tooltip'
   import flatPickr from 'vue-flatpickr-component';
   import 'flatpickr/dist/flatpickr.css';
-  import firebaseApp from '../firebaseConfig';
+  import firebaseApp from '../../firebaseConfig';
   import firebase from 'firebase'
   Vue.use(VueClipboard)
   export default {
@@ -209,20 +206,17 @@
           title: 'Copied to clipboard'
         })
       },
-      add(questionNumber){
+      add(){
           let question  = {
             'text':"",
-            'number':1,
             'options':[
               '','','',''
-            ]
-            }
-            let answer = ''
-            question.number=questionNumber+1
-            console.log("hkjwhk")
-           console.log(question.number)
-         console.log("hkjwhk")
-         this.testObj.questions.push(question)
+            ],
+            'number':0
+          }
+          let answer = ''
+            
+          this.testObj.questions.push(question)
           this.answers.push(answer)
       },
       moveDown(no){
@@ -271,11 +265,21 @@
           console.log(this.answers)
       },
       create(){
-        let db=firebase.firestore();
-        return firebaseApp.db.collection('tests').add(this.testObj).then(snapshot=>{
-            return db.doc("tests/"+snapshot.id).onSnapshot(test=>{
-                console.log(test.data())
+        this.testObj.questions.forEach((q,index)=>{
+            q.number = index+1
+        })
+        console.log(this.testObj)
+        console.log(this.answers)
+        firebaseApp.db.collection('tests').add(this.testObj).then(snapshot=>{
+            console.log(snapshot)
+            console.log(snapshot.id)
+            firebaseApp.db.doc('answers/'+ snapshot.id).set({'answerArray':this.answers}).then(snapshot=>{
+               this.$notify({
+                type: 'success',
+                title: 'Quiz Created'
+                }) 
             })
+            
         })
         
       }

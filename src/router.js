@@ -22,20 +22,37 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/Dashboard.vue')
         },
         {
+          path: '/ongoing',
+          name: 'ongoing',
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import(/* webpackChunkName: "demo" */ './views/register/OngoingTestList.vue')
+        },
+        {
+          path: '/details/:testId',
+          name: 'details',
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import(/* webpackChunkName: "demo" */ './views/register/ViewTestDetails.vue')
+        },
+        
+        {
           path: '/registered',
           name: 'registered',
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/Registered.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/attempt/RegisteredTestList.vue')
         },
         {
           path: '/create',
-          name: 'create-quiz',
+          name: 'create-test',
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/CreateQuiz.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/create/addQuestions.vue')
         },
         {
           path: '/icons',
@@ -45,7 +62,7 @@ export default new Router({
         {
           path: '/profile',
           name: 'profile',
-          component: () => import(/* webpackChunkName: "demo" */ './views/UserProfile.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/auth/UserProfile.vue')
         },
         {
           path: '/maps',
@@ -60,16 +77,16 @@ export default new Router({
       ]
     },
     {
-      path: '/quiz/:quizId',
+      path: '/test/:testId',
       component: QuizLayout,
       children: [
         {
           path: '/',
-          name: 'quizDetails',
+          name: 'testDetails',
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/QuizDetails.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/attempt/QuizDetails.vue')
         },
         {
           path: ':questionNumber',
@@ -77,19 +94,19 @@ export default new Router({
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/Question.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/attempt/Question.vue')
         }
       ]
     },
     
-    {
-      path: '/dashboard/:eventID',
-          name: 'Event Details',
-          // route level code-splitting
-          // this generates a separate chunk (about.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/eveView.vue')
-    },
+    // {
+    //   path: '/dashboard/:eventID',
+    //       name: 'Event Details',
+    //       // route level code-splitting
+    //       // this generates a separate chunk (about.[hash].js) for this route
+    //       // which is lazy-loaded when the route is visited.
+    //       component: () => import(/* webpackChunkName: "demo" */ './views/eveView.vue')
+    // },
     
     {
       path: '/',
@@ -99,12 +116,12 @@ export default new Router({
         {
           path: '/login',
           name: 'login',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Login.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/auth/Login.vue')
         },
         {
           path: '/register',
           name: 'register',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Register.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/auth/Register.vue')
         }
       ]
     }

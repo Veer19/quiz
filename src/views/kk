@@ -4,9 +4,9 @@
             <!-- Card stats -->
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <stats-card :title="'Question ' + quizObj.questions[currentQuestionNumber-1].number"
+                    <stats-card :title="'Question ' + testObj.questions[currentQuestionNumber-1].number"
                                 type="gradient-red"
-                                :sub-title="quizObj.questions[currentQuestionNumber-1].text"
+                                :sub-title="testObj.questions[currentQuestionNumber-1].text"
                                 class="mb-4 mb-xl-0"
                     >
 
@@ -23,7 +23,7 @@
                         <div class="card-body">
                             <div class="row icon-examples">
                                 <div class="col-lg-6 col-md-6 col-sm-12"
-                                     v-for="(option, index) in quizObj.questions[currentQuestionNumber-1].options" :key="index">
+                                     v-for="(option, index) in testObj.questions[currentQuestionNumber-1].options" :key="index">
                                     <button type="button"
                                             v-b-tooltip.hover.top
                                             :title="option"
@@ -62,7 +62,7 @@
       'b-tooltip': BTooltipDirective
     },
     props:{
-        quizObj:Object,
+        testObj:Object,
     },
     data() {
       return {

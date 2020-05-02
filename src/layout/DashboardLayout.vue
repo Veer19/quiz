@@ -8,13 +8,13 @@
       <template slot="links">
         <sidebar-item
           :link="{
-            name: 'Ongoing Quizzes',
+            name: 'Ongoing Tests',
             icon: 'ni ni-tv-2 text-primary',
-            path: '/dashboard'
+            path: '/ongoing'
           }"
         />
-        <sidebar-item :link="{name: 'Registered Quizzes', icon: 'ni ni-pin-3 text-orange', path: '/registered'}"/>  
-        <sidebar-item :link="{name: 'Create Quiz', icon: 'ni ni-planet text-blue', path: '/create'}"/>
+        <sidebar-item :link="{name: 'Registered Tests', icon: 'ni ni-pin-3 text-orange', path: '/registered'}"/>  
+        <sidebar-item :link="{name: 'Create Test', icon: 'ni ni-planet text-blue', path: '/create'}"/>
         
         <!-- <sidebar-item :link="{name: 'User Profile', icon: 'ni ni-single-02 text-yellow', path: '/profile'}"/>
         <sidebar-item :link="{name: 'Tables', icon: 'ni ni-bullet-list-67 text-red', path: '/tables'}"/>

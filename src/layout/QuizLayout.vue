@@ -6,11 +6,11 @@
       title="Quiz"
     >
       <template slot="links">
-       <div  v-for="question in quizObj.questions" v-bind:key="question.number">
-        <sidebar-item v-if="question.selected != '' && !question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-check-bold', path: '/quiz/'+quizId+'/'+question.number}"/>
-        <sidebar-item v-if="question.selected == '' && !question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-planet text-blue', path: '/quiz/'+quizId+'/'+question.number}"/>
-        <sidebar-item v-if="question.selected == '' && question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-active-40', path: '/quiz/'+quizId+'/'+question.number}"/>
-        <sidebar-item v-if="question.selected != '' && question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-glasses-2', path: '/quiz/'+quizId+'/'+question.number}"/>
+       <div  v-for="question in testObj.questions" v-bind:key="question.number">
+        <sidebar-item v-if="question.selected != '' && !question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-check-bold', path: '/test/'+testId+'/'+question.number}"/>
+        <sidebar-item v-if="question.selected == '' && !question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-planet text-blue', path: '/test/'+testId+'/'+question.number}"/>
+        <sidebar-item v-if="question.selected == '' && question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-active-40', path: '/test/'+testId+'/'+question.number}"/>
+        <sidebar-item v-if="question.selected != '' && question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-glasses-2', path: '/test/'+testId+'/'+question.number}"/>
        </div>
       </template>
     </side-bar>
@@ -20,7 +20,7 @@
       <div @click="toggleSidebar">
         <fade-transition :duration="200" origin="center top" mode="out-in">
           <!-- your content here -->
-          <router-view v-if="quizObj" :quizId="quizId" :quizObj="quizObj" ></router-view>
+          <router-view v-if="testObj" :testId="testId" :testObj="testObj" ></router-view>
         </fade-transition>
       </div>
       
@@ -45,8 +45,8 @@
     data() {
       return {
         sidebarBackground: 'vue', //vue|blue|orange|green|red|primary
-        quizObj:{},
-        quizId:Number,
+        testObj:{},
+        testId:Number,
         // onclk:false
       };
     },
@@ -59,13 +59,13 @@
       
     },
     mounted(){
-      // console.log(this.$route.params.quizId)
+      // console.log(this.$route.params.testId)
       //GET MATCH QUIZ
-      this.quizId = this.$route.params.quizId
-      console.log(this.quizId)
-      firebaseApp.db.doc("tests/"+this.quizId).get().then(snapshot=>{
-        this.quizObj = snapshot.data()
-        this.quizObj.questions.forEach(q=>{
+      this.testId = this.$route.params.testId
+      console.log(this.testId)
+      firebaseApp.db.doc("tests/"+this.testId).get().then(snapshot=>{
+        this.testObj = snapshot.data()
+        this.testObj.questions.forEach(q=>{
           q['marked']=false,
           q['selected']=false
         })

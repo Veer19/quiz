@@ -21,7 +21,14 @@ import router from './router'
 import './registerServiceWorker'
 import ArgonDashboard from './plugins/argon-dashboard'
 import VeeValidate from 'vee-validate'
+import VueToast from 'vue-toast-notification';
+// Import any of available themes
+import 'vue-toast-notification/dist/theme-default.css';
+// import 'vue-toast-notification/dist/dist/theme-default.css';
+//import 'vue-toast-notification/dist/dist/theme-sugar.css';
 
+
+Vue.use(VueToast);
 Vue.use(VeeValidate)
 Vue.config.productionTip = false
 Vue.use(ArgonDashboard)
