@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="user">
         <base-header class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
             <!-- Mask -->
             <span class="mask bg-gradient-success opacity-8"></span>
@@ -114,27 +114,20 @@
     export default {
         name: 'user-profile',
         data() {
-        return {
-            user: {
-            name: '',
-            email: '',
-            phone:'',
-            college: '',
-            stream: '',
-            year: '',
-            },
-            uid:''
-        }
+            return {
+                user: null
+            }
+        },
+        props: {
+            uid:String
         },
         beforeMount(){
-            this.uid = localStorage.getItem('uid')
             firebaseApp.db.doc('users/'+this.uid).onSnapshot(snapshot=>{
                 this.user = snapshot.data()
             })
         },
         methods:{
             editProfileDetails(){
-                
                 firebaseApp.db.doc('users/'+this.uid).update(this.user).then(snapshot=>{
                     this.$toast.open({
                         message: "Changes Saved",

@@ -49,6 +49,9 @@
         ]
       }
     },
+    props: {
+      testId:String
+    },
     methods: {
       onCopy() {
         this.$notify({

@@ -31,51 +31,44 @@
                 </div>
                 
                 
-                <div class="container-col-lg-12 col-md-12">
+                <div class="container-col-lg-8 col-md-8">
                     <div class="row">
                         <div class="col">
                             <div class="card shadow">
                                 <div class="card-body">
+                                    <h3> Timing Details </h3>
                                     <div class="row icon-examples">
                                         <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <button type="button"
-                                                    v-b-tooltip.hover.top
-                                                    class="btn-icon-clipboard" data-clipboard-text="air-baloon">
+                                            
                                                 <flat-pickr
-                                                        v-model="testObj.timings.from"                                               
+                                                        v-model="testObj.timings.from"   
+                                                        :config="dateConfig"
                                                         class="date-picker" 
                                                         placeholder="Select Quiz Starting Date"               
                                                         name="fromdate">
                                                 </flat-pickr>
-                                            </button>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <button type="button"
-                                                    v-b-tooltip.hover.top
-                                                    class="btn-icon-clipboard" data-clipboard-text="air-baloon">
                                                 <flat-pickr
-                                                        v-model="testObj.timings.to"                                               
+                                                        v-model="testObj.timings.to"  
+                                                        :config="dateConfig"                                             
                                                         class="date-picker" 
                                                         placeholder="Select Quiz Ending Date"               
                                                         name="todate">
                                                 </flat-pickr>
-                                            </button>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <button type="button"
-                                                    v-b-tooltip.hover.top
-                                                    class="btn-icon-clipboard" data-clipboard-text="air-baloon">
-                                                    <base-dropdown >
-                                                        <base-button slot="title" type="default" class="duration-picker dropdown-toggle">
-                                                            Duration
-                                                        </base-button>
-                                                        <li v-for="i in [1,2,3,4,5]" :key="i">
-                                                            <a class="dropdown-item" @click="testObj.timings.duration = i">
-                                                                {{i}} Hours
-                                                            </a>
-                                                        </li>
-                                                    </base-dropdown>
-                                            </button>
+                                            <base-dropdown >
+                                                <base-button slot="title" type="default" class="duration-picker dropdown-toggle" >
+                                                        <span v-if="!testObj.timings.duration">Duration</span>
+                                                        <span v-if="testObj.timings.duration">{{testObj.timings.duration}} Hours</span>
+                                                </base-button>
+                                                <li v-for="i in [1,2,3,4,5]" :key="i">
+                                                    <a class="dropdown-item" @click="testObj.timings.duration = i">
+                                                        {{i}} Hours
+                                                    </a>
+                                                </li>
+                                            </base-dropdown>
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +76,23 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="container-col-lg-4 col-md-4">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <h3> Pricing </h3>
+                                        <base-input class="input-group"
+                                                    placeholder="Price of Quiz (In INR)"
+                                                    v-validate="'required'"
+                                                    name="price"
+                                                    v-model="testObj.price">
+                                        </base-input>                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </base-header>
 
@@ -118,18 +127,19 @@
                                     <br>
                                     <div class="row icon-examples">
                                         <div class="col-lg-6 col-md-6 col-sm-12"
-                                            v-for="(option, optionNumber) in testObj.questions[questionNumber].options" :key="optionNumber">
+                                            v-for="(optionKey, optionNumber) in Object.keys(testObj.questions[questionNumber].options)" :key="optionNumber">
                                             <base-input class="input-group-alternative mb-3 optionInput"
-                                                        :placeholder="'Option '+(optionNumber+1)"
+                                                        :placeholder="'Option '+(optionKey)"
                                                         v-validate="'required'"
-                                                        :name="'Option '+(optionNumber+1)"
-                                                        v-model="testObj.questions[questionNumber].options[optionNumber]">
+                                                        :name="'Option '+(optionKey)"
+                                                        v-model="testObj.questions[questionNumber].options[optionKey]">
                                             </base-input>
                                         </div>
                                     </div>
-                                    <base-dropdown>
+                                    <base-dropdown v-if="reload">
                                         <base-button slot="title" type="default" class="dropdown-toggle">
-                                             Correct Option
+                                             <span v-if="answers[questionNumber]==''">Choose Correct Option</span>
+                                             <span v-if="answers[questionNumber]!=''">Correct Option {{answers[questionNumber]}}</span>
                                         </base-button>
                                         <li>
                                             <a class="dropdown-item" @click="setAnswer(questionNumber,'A')">
@@ -152,7 +162,7 @@
                                             </a>
                                         </li>
                                     </base-dropdown>
-                                    {{answers[questionNumber]}}
+                                    
                                 </div>
                             </div>
                         </div>    
@@ -191,12 +201,18 @@
             'questions':[],
             'registeredUsers':[],
             'timings':{
-                'from':0,
-                'to':0,
-                'duration':0
+                'from':null,
+                'to':null,
+                'duration':null
             },
         },
-        answers:[]
+        answers:[],
+        dateConfig :{
+            altInput: true,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        },
+        reload:true
       }
     },
     methods: {
@@ -209,9 +225,12 @@
       add(){
           let question  = {
             'text':"",
-            'options':[
-              '','','',''
-            ],
+            'options':{
+                "A":"",
+                "B":"",
+                "C":"",
+                "D":""
+            },
             'number':0
           }
           let answer = ''
@@ -260,9 +279,10 @@
           this.answers.splice(no,1)
       },
       setAnswer(questionNumber, optionNo){
-          
+          this.reload = false
           this.answers[questionNumber]=optionNo
           console.log(this.answers)
+          this.reload = true
       },
       create(){
         this.testObj.questions.forEach((q,index)=>{
@@ -273,13 +293,19 @@
         firebaseApp.db.collection('tests').add(this.testObj).then(snapshot=>{
             console.log(snapshot)
             console.log(snapshot.id)
-            firebaseApp.db.doc('answers/'+ snapshot.id).set({'answerArray':this.answers}).then(snapshot=>{
-               this.$notify({
-                type: 'success',
-                title: 'Quiz Created'
+            Promise.all([
+                firebaseApp.db.doc('tests/'+ snapshot.id).update({"id":snapshot.id}),
+                firebaseApp.db.doc('tests/'+snapshot.id + '/answers/correct').set({
+                    'answerArray':this.answers,
+                    'answeredBy':"Admin"
+                })
+            ]).then(snapshot=>{
+                this.$notify({
+                    type: 'success',
+                    title: 'Quiz Created'
                 }) 
+                this.$router.push('/dashboard')
             })
-            
         })
         
       }

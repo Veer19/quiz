@@ -100,6 +100,7 @@ import firebaseApp from '../../firebaseConfig'
                 .then(doc => {
                     if(!doc.exists){
                         return firebaseApp.db.doc("users/"+ user.uid).set({
+                            uid:user.uid,
                             name : user.displayName,
                             email: user.email,
                             registeredTests:[],
@@ -122,21 +123,19 @@ import firebaseApp from '../../firebaseConfig'
             })
         },
         createAccount(){
-            firebaseApp.auth.createUserWithEmailAndPassword(this.email,this.password).then(user=>{
-                console.log(user)
+            firebaseApp.auth.createUserWithEmailAndPassword(this.email,this.password).then(snapshot=>{
                 let userData= {
+                    uid:snapshot.user.uid,
                     name : this.name,
                     email: this.email,
                     registeredTests:[],
                     phone:'',
                     college: '',
                     stream: '',
-                    year: '',
+                    semester: '',
                     photoURL:''
                 }
-                firebaseApp.db.doc("users/"+user.user.uid).set(userData).then(()=>{
-                    console.log(userData)
-                    localStorage.setItem('uid',user.user.uid)
+                firebaseApp.db.doc("users/"+snapshot.user.uid).set(userData).then(()=>{
                     this.$router.push('dashboard')
                 })
             })

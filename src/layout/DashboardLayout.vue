@@ -23,13 +23,13 @@
 
       </template>
     </side-bar>
-    <div class="main-content" :data="sidebarBackground">
-      <dashboard-navbar></dashboard-navbar>
+    <div class="main-content" :data="sidebarBackground" v-if="uid">
+      <dashboard-navbar :key="uid" :uid="uid" ></dashboard-navbar>
 
       <div @click="toggleSidebar">
         <fade-transition :duration="200" origin="center top" mode="out-in">
           <!-- your content here -->
-          <router-view></router-view>
+          <router-view :key="$route.fullPath" :uid="uid" ></router-view>
         </fade-transition>
         <content-footer v-if="!$route.meta.hideFooter"></content-footer>
       </div>
@@ -37,6 +37,8 @@
   </div>
 </template>
 <script>
+  import firebase from 'firebase'
+  import firebaseApp from '../firebaseConfig';
   import DashboardNavbar from './DashboardNavbar.vue';
   import ContentFooter from './ContentFooter.vue';
   import { FadeTransition } from 'vue2-transitions';
@@ -49,9 +51,23 @@
     },
     data() {
       return {
-        sidebarBackground: 'vue' //vue|blue|orange|green|red|primary
+        sidebarBackground: 'vue', //vue|blue|orange|green|red|primary,
+        uid:null
       };
     },
+    mounted(){
+      let self = this
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // Return UID
+          self.uid = user.uid
+        }
+        else {
+          self.$router.push('login')
+        }
+      });
+    },
+
     methods: {
       toggleSidebar() {
         if (this.$sidebar.showSidebar) {

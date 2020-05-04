@@ -1,5 +1,6 @@
 <template>
-    <div v-if="questionLoaded">
+    <div v-if="testObj">
+      
         <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
             <!-- Card stats -->
             <div class="row">
@@ -23,19 +24,14 @@
                         <div class="card-body">
                             <div class="row icon-examples">
                                 <div class="col-lg-6 col-md-6 col-sm-12"
-                                     v-for="(option, index) in testObj.questions[currentQuestionNumber-1].options" :key="index">
+                                     v-for="(option, key) in testObj.questions[currentQuestionNumber-1].options" :key="key">
                                     <button type="button"
-                                            :style="selectedColor(testObj.questions[currentQuestionNumber-1].selected == option)"
+                                            :style="selectedColor(testObj.questions[currentQuestionNumber-1].selected == key)"
                                             v-b-tooltip.hover.top
                                             :title="option"
-                                            class="btn-icon-clipboard" data-clipboard-text="air-baloon" @click="optionSelected(option)">
+                                            class="btn-icon-clipboard" data-clipboard-text="air-baloon" @click="optionSelected(key)">
                                         <div>
-                                          <!-- {{testObj.questions[currentQuestionNumber-1]}} -->
-                                            <!-- <div v-if="testObj.questions[currentQuestionNumber-1] == option">Selected</div> -->
-                                            <span class="optionAlpha" v-if="index==0">A</span>
-                                            <span class="optionAlpha" v-if="index==1">B</span>
-                                            <span class="optionAlpha" v-if="index==2">C</span>
-                                            <span class="optionAlpha" v-if="index==3">D</span>
+                                            <span class="optionAlpha">{{key}}</span>
                                             <span>{{option}}</span>
                                         </div>
                                     </button>
@@ -82,6 +78,7 @@
   import Vue from 'vue'
   import VueClipboard from 'vue-clipboard2'
   import BTooltipDirective from 'bootstrap-vue/es/directives/tooltip'
+  import firebaseApp from '../../firebaseConfig';
   Vue.use(VueClipboard)
   
   export default {
@@ -91,6 +88,7 @@
     props:{
         testObj:Object,
         testId:String,
+        uid:String
     },
     data() {
       return {
@@ -104,6 +102,12 @@
         console.log(this.testObj)
         let answers = this.testObj.questions.map(q=>{return q.selected})
         console.log(answers)
+        firebaseApp.db.doc("tests/"+this.testObj.id+"/answers/" + this.uid).set({
+          "answerArray":answers,
+          "answeredBy":this.uid
+        }).then(snapshot=>{
+          this.$router.push("/registered/")
+        })
         //PUSH ANSWERS
       },
       onCopy() {
@@ -126,16 +130,15 @@
           this.testObj.questions[currentQuestionNumber-1].marked = false;
           this.$forceUpdate()
       },
-      optionSelected(selected){
-        // this.reloadComponent = false
-        // this.onclk = true;
-        if(this.testObj.questions[this.currentQuestionNumber-1].selected == selected){
+      optionSelected(key){
+        if(this.testObj.questions[this.currentQuestionNumber-1].selected == key){
           this.testObj.questions[this.currentQuestionNumber-1].selected = ""
-          return;
         }
-        this.testObj.questions[this.currentQuestionNumber-1].selected = selected
+        else {
+          this.testObj.questions[this.currentQuestionNumber-1].selected = key
+        }
+        
         this.$forceUpdate()
-        // this.reloadComponent = true
       }
     },
     // beforeMount(){
@@ -154,15 +157,6 @@
           }
         }
     },
-    mounted(){
-        // this.currentQuestionNumber = this.$route.params.questionNumber
-        this.questionLoaded = true
-        // console.log(this.testObj.questions)
-        // this.testObj.questions.forEach(q=>{
-        //   this.testObj.questions.push("")
-        // })
-        // console.log(this.testObj.questions)
-    }
   };
 </script>
 <style>

@@ -12,7 +12,7 @@
                 </base-input>
             </div>
         </form>
-        <ul class="navbar-nav align-items-center d-none d-md-flex">
+        <ul class="navbar-nav align-items-center d-none d-md-flex" v-if="user">
             <li class="nav-item dropdown">
                 <base-dropdown class="nav-link pr-0">
                     <div class="media align-items-center" slot="title">
@@ -45,10 +45,10 @@
                             <span>Support</span>
                         </router-link>
                         <div class="dropdown-divider"></div>
-                        <router-link to="/profile" class="dropdown-item">
+                        <div  @click="logout" class="dropdown-item">
                             <i class="ni ni-user-run"></i>
                             <span>Logout</span>
-                        </router-link>
+                        </div>
                     </template>
                 </base-dropdown>
             </li>
@@ -57,22 +57,23 @@
 </template>
 <script>
   import firebaseApp from '../firebaseConfig';
+  import firebase from 'firebase'
   export default {
     data() {
       return {
         activeNotifications: false,
         showMenu: false,
         searchQuery: '',
-        user:{}
+        user:null
       };
     },
-    mounted(){
-      this.uid = localStorage.getItem('uid')
+    props: {
+      uid:String
+    },
+    mounted() {
       firebaseApp.db.doc('users/'+this.uid).onSnapshot(snapshot=>{
           this.user = snapshot.data()
       })
-      console.log(this.user);
-      
     },
     methods: {
       toggleSidebar() {
@@ -83,6 +84,14 @@
       },
       toggleMenu() {
         this.showMenu = !this.showMenu;
+      },
+      logout(){
+        firebase.auth().signOut().then(function() {
+          console.log("Logged Out")
+        }).catch(function(error) {
+          // An error happened.
+          console.log(error)
+        });
       }
     }
   };

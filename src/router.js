@@ -19,7 +19,7 @@ export default new Router({
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/Dashboard.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/admin/Dashboard.vue')
         },
         {
           path: '/ongoing',
@@ -27,24 +27,15 @@ export default new Router({
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/register/OngoingTestList.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/list/TestList.vue')
         },
-        {
-          path: '/details/:testId',
-          name: 'details',
-          // route level code-splitting
-          // this generates a separate chunk (about.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/register/ViewTestDetails.vue')
-        },
-        
         {
           path: '/registered',
           name: 'registered',
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
-          component: () => import(/* webpackChunkName: "demo" */ './views/attempt/RegisteredTestList.vue')
+          component: () => import(/* webpackChunkName: "demo" */ './views/list/TestList.vue')
         },
         {
           path: '/create',
@@ -53,6 +44,14 @@ export default new Router({
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
           component: () => import(/* webpackChunkName: "demo" */ './views/create/addQuestions.vue')
+        },
+        {
+          path: '/details/:testId',
+          name: 'details',
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import(/* webpackChunkName: "demo" */ './views/register/ViewTestDetails.vue')
         },
         {
           path: '/icons',
@@ -123,6 +122,7 @@ export default new Router({
           name: 'register',
           component: () => import(/* webpackChunkName: "demo" */ './views/auth/Register.vue')
         }
+        
       ]
     }
   ]

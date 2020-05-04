@@ -77,20 +77,24 @@
                     .then(doc => {
                         if(!doc.exists){
                             return firebaseApp.db.doc("users/"+ user.uid).set({
+                                uid:user.uid,
                                 name : user.displayName,
                                 email: user.email,
                                 registeredTests:[],
                                 phone:'',
                                 college: '',
                                 stream: '',
-                                year: '',
+                                semester: '',
                                 photoURL:user.photoURL
                             })
                         }
-                        else {
-                            console.log(doc.data())
-                            localStorage.setItem('uid',doc.id)
-                        }
+                        // else {
+                        //     firebase.auth().onAuthStateChanged(function(user) {
+                        //         if (user) {
+                        //             // User is signed in.
+                        //         }
+                        //     });
+                        // }
                     })
                 })
                 .then(()=>{
@@ -99,7 +103,6 @@
             },
             loginEmail(){
                 firebaseApp.auth.signInWithEmailAndPassword(this.email,this.password).then(user=>{
-                    localStorage.setItem('uid',user.id)
                     this.$router.push('dashboard')
                 })
                 .catch(err=>{

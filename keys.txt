@@ -1,0 +1,23 @@
+setInterval(function(){document.getElementById('like').click()}, 500);
+
+Since we cant go out for a while,
+
+Why dont we dig a little deeper instead
+
+And try to unwind what we are all about
+
+WE might have to face our fears
+
+But after slaying our demons
+
+We might find our true selves
+
+TEST
+rzp_test_QD1Usn6rPsxYdZ
+i1JTgbCI6vjWe2526KGR3xtB
+
+
+Push Pending transactions -> Razorpay firebase function -> Completed Transaction -> Push User Object in sub collection
+LIVE 
+rzp_live_YIQZZ61TlRtZwS
+2SpYJOfmc23xZ9UKGUS2iL7Q

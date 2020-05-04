@@ -1,16 +1,16 @@
 <template>
-  <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
+  <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }" v-if="testObj && uid">
     <side-bar
       :background-color="sidebarBackground"
       short-title="Quiz"
       title="Quiz"
     >
-      <template slot="links">
+      <template slot="links" >
        <div  v-for="question in testObj.questions" v-bind:key="question.number">
-        <sidebar-item v-if="question.selected != '' && !question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-check-bold', path: '/test/'+testId+'/'+question.number}"/>
-        <sidebar-item v-if="question.selected == '' && !question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-planet text-blue', path: '/test/'+testId+'/'+question.number}"/>
+        <sidebar-item :style="getColor(question.selected,question.marked)" :link="{name: 'Question '+question.number, path: '/test/'+testId+'/'+question.number}"/>
+        <!-- <sidebar-item v-if="question.selected == '' && !question.marked" :link="{name: 'Question '+question.number, path: '/test/'+testId+'/'+question.number}"/>
         <sidebar-item v-if="question.selected == '' && question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-active-40', path: '/test/'+testId+'/'+question.number}"/>
-        <sidebar-item v-if="question.selected != '' && question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-glasses-2', path: '/test/'+testId+'/'+question.number}"/>
+        <sidebar-item v-if="question.selected != '' && question.marked" :link="{name: 'Question '+question.number, icon: 'ni ni-glasses-2', path: '/test/'+testId+'/'+question.number}"/> -->
        </div>
       </template>
     </side-bar>
@@ -20,7 +20,7 @@
       <div @click="toggleSidebar">
         <fade-transition :duration="200" origin="center top" mode="out-in">
           <!-- your content here -->
-          <router-view v-if="testObj" :testId="testId" :testObj="testObj" ></router-view>
+          <router-view  :uid="uid" :testId="testId" :testObj="testObj" ></router-view>
         </fade-transition>
       </div>
       
@@ -45,9 +45,9 @@
     data() {
       return {
         sidebarBackground: 'vue', //vue|blue|orange|green|red|primary
-        testObj:{},
-        testId:Number,
-        // onclk:false
+        testObj:null,
+        testId:String,
+        uid:String
       };
     },
     methods: {
@@ -56,15 +56,40 @@
           this.$sidebar.displaySidebar(false);
         }
       },
+      getColor(sel,mark){
+        if(sel != '' && !mark){
+          return {'background':'#2DCEBA',"color":"white"}
+        }
+        else if(sel == "" && mark){
+          return {'background':'blue'}
+        } 
+        else if(sel == "" && !mark){
+          // return {'background':'red'}
+        } 
+        else if(sel != "" && mark){
+          return {'background':'green'}
+        } 
+      },
       
     },
-    mounted(){
+    beforeMount(){
       // console.log(this.$route.params.testId)
       //GET MATCH QUIZ
+      let self = this
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // Return UID
+          self.uid = user.uid
+        }
+        else {
+          self.$router.push('login')
+        }
+      });
       this.testId = this.$route.params.testId
       console.log(this.testId)
       firebaseApp.db.doc("tests/"+this.testId).get().then(snapshot=>{
         this.testObj = snapshot.data()
+        console.log(this.testObj)
         this.testObj.questions.forEach(q=>{
           q['marked']=false,
           q['selected']=false
@@ -76,4 +101,8 @@
   };
 </script>
 <style lang="scss">
+.navbar-vertical.navbar-expand-md .navbar-nav .nav-link.active:before {
+  border-left: 20px solid #5e72e4 !important;
+  border-radius: 0 50% 50% 0 ;
+}
 </style>
